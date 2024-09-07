@@ -46,9 +46,12 @@ const fetchAnnouncements = async () => {
     const previousDate = new Date();
     previousDate.setDate(previousDate.getDate() - 1);
 
+    const homepageurl = 'https://www.nseindia.com/companies-listing/corporate-filings-announcements';
     const url = `https://www.nseindia.com/api/corporate-announcements?index=equities&from_date=${getFormattedDate(previousDate)}&to_date=${getFormattedDate(today)}`;
     console.log(`URL used to fetch daily nse announcements: ${url}`);
     try {
+        const homepageurlResponse = await fetch(homepageurl, { mode: "no-cors" });
+        console.log(homepageurlResponse);
         const response = await fetch(url, { mode: "no-cors" });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
