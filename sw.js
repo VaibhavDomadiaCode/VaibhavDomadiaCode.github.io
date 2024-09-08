@@ -30,6 +30,25 @@ self.addEventListener('notificationclick', event => {
     }
 }, false);
 
+self.addEventListener("fetch", event => {
+    console.log("Fetching", event.request);
+});
+
+self.addEventListener("fetch", event => {
+    console.log('Hello fetch');
+    async function removeUserAgent() {
+        const keys = event.request.headers.keys();
+
+        for(const key of keys) {
+            console.log(key);
+        }
+
+        return await fetch(event.request.url);
+    }
+
+    event.respondWith(removeUserAgent());
+});
+
 function getFormattedDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -46,18 +65,23 @@ const fetchAnnouncements = async () => {
     const previousDate = new Date();
     previousDate.setDate(previousDate.getDate() - 1);
 
-    const homepageurl = 'https://www.nseindia.com/companies-listing/corporate-filings-announcements';
     const url = `https://www.nseindia.com/api/corporate-announcements?index=equities&from_date=${getFormattedDate(previousDate)}&to_date=${getFormattedDate(today)}`;
     console.log(`URL used to fetch daily nse announcements: ${url}`);
+    
     try {
-        const homepageurlResponse = await fetch(homepageurl, { mode: "no-cors" });
-        console.log(homepageurlResponse);
-        const response = await fetch(url, { mode: "no-cors" });
+        const response = await fetch(url, {
+            "headers": {
+                "cookie": "nsit=b6Hcn1TKxzn7Cpt_HYnDQPCL; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTcyNTgwMzAxOCwiZXhwIjoxNzI1ODEwMjE4fQ.mMVo2VvRX2CbFEJyOVupNUi5wrTTYIrE5WI10qOzj1A;"
+            }
+        });
+
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
 
         const announcements = await response.json();
+
+        console.log(announcements);
         /*const announcements = [
             {
                 "symbol": "BHARATRAS",
