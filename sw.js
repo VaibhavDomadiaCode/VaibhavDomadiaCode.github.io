@@ -71,7 +71,12 @@ const fetchAnnouncements = async () => {
             }
         });*/
 
-        const bseResponse = await fetch(bseurl);
+        const bseResponse = await fetch(bseurl, {
+            "mode": "no-cors",
+            "headers": {
+                "Referer": "https://www.bseindia.com"
+            }
+        });
 
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
