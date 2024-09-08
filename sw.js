@@ -42,6 +42,14 @@ function getFormattedDate(date) {
     return `${day}-${month}-${year}`;
 }
 
+function getFormattedDateForBSE(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+
+    return `${year}${month}${day}`;
+}
+
 const fetchAnnouncements = async () => {
     console.log("Fetch Announcement called");
 
@@ -50,16 +58,20 @@ const fetchAnnouncements = async () => {
     const previousDate = new Date();
     previousDate.setDate(previousDate.getDate() - 1);
 
-    const url = `https://www.nseindia.com/api/corporate-announcements?index=equities&from_date=${getFormattedDate(previousDate)}&to_date=${getFormattedDate(today)}`;
-    console.log(`URL used to fetch daily nse announcements: ${url}`);
+    //const url = `https://www.nseindia.com/api/corporate-announcements?index=equities&from_date=${getFormattedDate(previousDate)}&to_date=${getFormattedDate(today)}`;
+    //console.log(`URL used to fetch daily nse announcements: ${url}`);
+    const bseurl = `https://api.bseindia.com/BseIndiaAPI/api/AnnSubCategoryGetData/w?strCat=Board+Meeting&strSearch=P&strToDate=${getFormattedDateForBSE(today)}&strType=C&subcategory=-1&strPrevDate=${getFormattedDateForBSE(previousDate)}`
+    console.log(`URL used to fetch daily bse announcements: ${bseurl}`);
     
     try {
-        const response = await fetch(url, {
+        /*const response = await fetch(url, {
             "mode": "no-cors",
             "headers": {
                 "cookie": "nsit=b6Hcn1TKxzn7Cpt_HYnDQPCL; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTcyNTgwMzAxOCwiZXhwIjoxNzI1ODEwMjE4fQ.mMVo2VvRX2CbFEJyOVupNUi5wrTTYIrE5WI10qOzj1A;"
             }
-        });
+        });*/
+
+        const bseResponse = await fetch(bseurl);
 
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
@@ -147,7 +159,7 @@ const fetchAnnouncements = async () => {
             }
         ]*/
 
-        for (const announcement of announcements) {
+        /*for (const announcement of announcements) {
             const nseSymbol = announcement["symbol"];
             const equityName = announcement["sm_name"];
             const title = announcement["desc"];
@@ -171,7 +183,7 @@ const fetchAnnouncements = async () => {
                     ]
                 });
             }
-        }
+        }*/
     } catch (error) {
         console.error(error.message);
     }
