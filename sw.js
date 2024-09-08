@@ -34,21 +34,6 @@ self.addEventListener("fetch", event => {
     console.log("Fetching", event.request);
 });
 
-self.addEventListener("fetch", event => {
-    console.log('Hello fetch');
-    async function removeUserAgent() {
-        const keys = event.request.headers.keys();
-
-        for(const key of keys) {
-            console.log(key);
-        }
-
-        return await fetch(event.request.url);
-    }
-
-    event.respondWith(removeUserAgent());
-});
-
 function getFormattedDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
