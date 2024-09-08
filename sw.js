@@ -70,6 +70,7 @@ const fetchAnnouncements = async () => {
     
     try {
         const response = await fetch(url, {
+            "mode": "no-cors",
             "headers": {
                 "cookie": "nsit=b6Hcn1TKxzn7Cpt_HYnDQPCL; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTcyNTgwMzAxOCwiZXhwIjoxNzI1ODEwMjE4fQ.mMVo2VvRX2CbFEJyOVupNUi5wrTTYIrE5WI10qOzj1A;"
             }
